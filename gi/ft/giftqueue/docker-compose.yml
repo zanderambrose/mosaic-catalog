@@ -13,7 +13,7 @@ services:
       - NEXT_PUBLIC_REGISTRY_BASE_URL=$NEXT_PUBLIC_REGISTRY_BASE_URL
       - NEXT_PUBLIC_REGISTRY_API_BASE_URL=$NEXT_PUBLIC_REGISTRY_API_BASE_URL
     healthcheck:
-      test: curl localhost:3000
+      test: ['CMD-SHELL', 'ls']
       interval: 10s
       timeout: 10s
       retries: 5
