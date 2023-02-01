@@ -4,7 +4,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - 3000:3000
+      - 3005:3000
     environment:
       - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
@@ -21,7 +21,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - 8000:8000
+      - 8009:8000
     environment:
       - GOOGLE_AUD_CLAIM=$GOOGLE_AUD_CLAIM
       - NEXT_PUBLIC_FRONTEND_BASE_URL=$NEXT_PUBLIC_FRONTEND_BASE_URL
