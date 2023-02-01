@@ -2,8 +2,7 @@ version: "3.9"
 
 services:
   frontend:
-    build: ./frontend
-    container_name: frontend
+    build: $COMPOSE_FILE/frontend
     ports:
       - 3000:3000
     environment:
@@ -13,9 +12,14 @@ services:
       - NEXT_AUTH_SECRET=$NEXT_AUTH_SECRET
       - NEXT_PUBLIC_REGISTRY_BASE_URL=$NEXT_PUBLIC_REGISTRY_BASE_URL
       - NEXT_PUBLIC_REGISTRY_API_BASE_URL=$NEXT_PUBLIC_REGISTRY_API_BASE_URL
+    healthcheck:
+      test: curl localhost:3000
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
   backend:
-    build: ./backend
-    container_name: backend
+    build: $COMPOSE_FILE/backend
     ports:
       - 8000:8000
     environment:
@@ -28,10 +32,14 @@ services:
     restart: always
     links:
       - "db:database"
+    healthcheck:
+      test: curl localhost:8000
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
   db:
     image: postgres
-    container_name: db
     restart: always
     environment:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
@@ -40,6 +48,12 @@ services:
       - 5432:5432
     volumes:
       - fractal-app-volume:/data 
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
   link:
     environment:
       EXPOSE: frontend:3000 
