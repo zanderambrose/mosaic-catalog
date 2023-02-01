@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   frontend:
-    build: $COMPOSE_FILE/frontend
+    build: ./frontend
     ports:
       - 3000:3000
     environment:
@@ -19,7 +19,7 @@ services:
       retries: 5
 
   backend:
-    build: $COMPOSE_FILE/backend
+    build: ./backend
     ports:
       - 8000:8000
     environment:
