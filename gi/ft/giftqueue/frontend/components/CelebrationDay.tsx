@@ -1,8 +1,14 @@
-import { faChampagneGlasses, faX } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChampagneGlasses,
+  faX,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import NoItemDefaultCard from "./NoItemDefaultCard";
 import Calendar from "react-calendar";
+import DateCard from "./DateCard";
+import MyEventCard from "./MyEventCard";
 
 const CelebrationDay = () => {
   // State for showing users days or default state
@@ -10,9 +16,13 @@ const CelebrationDay = () => {
 
   // State for celebration day modal
   const [addFirstDayModal, setAddFirstDayModal] = useState(false);
+
+  // State for Delete Event Modal
+  const [deleteEventModal, setDeleteEventModal] = useState(false);
+
   return (
     <>
-      {!hasEvents ? (
+      {hasEvents ? (
         <NoItemDefaultCard
           icon={faChampagneGlasses}
           headingText="No celebration days entered yet!"
@@ -20,7 +30,43 @@ const CelebrationDay = () => {
           setModalToShow={setAddFirstDayModal}
         />
       ) : (
-        <h2>you got elements</h2>
+        <div className="relative top-10 px-8">
+          <div className="celebration-day-header">
+            <h1 className="text-lg relative right-2">This Week</h1>
+            <button
+              onClick={() => setAddFirstDayModal(true)}
+              className="btn-add-new rounded relative left-2"
+            >
+              <FontAwesomeIcon className="relative right-2" icon={faPlus} />
+              Add New Event
+            </button>
+          </div>
+          {/* TODO - extract this into its own component */}
+          <div className="flex flex-row gap-x-4 mt-4">
+            <div>
+              <DateCard />
+            </div>
+            <div className="flex-1">
+              <MyEventCard />
+            </div>
+          </div>
+          <div className="flex flex-row gap-x-4 mt-4">
+            <div>
+              <DateCard />
+            </div>
+            <div className="flex-1">
+              <MyEventCard />
+            </div>
+          </div>
+          <div className="flex flex-row gap-x-4 mt-4">
+            <div>
+              <DateCard />
+            </div>
+            <div className="flex-1">
+              <MyEventCard />
+            </div>
+          </div>
+        </div>
       )}
       {addFirstDayModal ? (
         <>
@@ -28,7 +74,7 @@ const CelebrationDay = () => {
             onClick={() => setAddFirstDayModal(false)}
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
           >
-            <div className="relative w-4/12 my-6 mx-auto max-w-3xl">
+            <div className="relative w-5/12 my-6 mx-auto max-w-3xl">
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
@@ -76,6 +122,61 @@ const CelebrationDay = () => {
                     onClick={() => setAddFirstDayModal(false)}
                   >
                     Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
+      {deleteEventModal ? (
+        <>
+          <div
+            onClick={() => setDeleteEventModal(false)}
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          >
+            <div className="relative w-5/12 my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <h3 className="mt-6 text-lg font-semibold text-center">
+                  Delete Event
+                </h3>
+                {/*body*/}
+                <div className="relative px-6 flex-auto">
+                  <p className="muted text-sm my-6 w-10/12 text-center mx-auto">
+                    You are about to delete the registered event. Are you sure
+                    that you would like to delete it? Note your friend list may
+                    see this update!
+                  </p>
+                  <div className="text-center mb-8">
+                    <input
+                      type="checkbox"
+                      className="text-center mr-2"
+                      name="friend-notify"
+                      id="friend-notify"
+                    />
+                    <label htmlFor="friend-notify">
+                      Don't notify my friends
+                    </label>
+                  </div>
+                </div>
+                {/*footer*/}
+                <div className="flex flex-row items-center justify-center mb-6">
+                  <button
+                    className="deleteModalDeleteBtn mr-2"
+                    type="button"
+                    onClick={() => setAddFirstDayModal(false)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="deleteModalCancelBtn ml-2"
+                    type="button"
+                    onClick={() => setAddFirstDayModal(false)}
+                  >
+                    Cancel
                   </button>
                 </div>
               </div>

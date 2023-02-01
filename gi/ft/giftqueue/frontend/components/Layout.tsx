@@ -17,7 +17,7 @@ const Layout = () => {
         <div className="overflow-y-scroll flex-1">
           <Maincontent />
         </div>
-        <div className="sidebar-layout">
+        <div className="sidebar-layout overflow-y-scroll">
           <ActivityFeedSidebar />
         </div>
       </div>

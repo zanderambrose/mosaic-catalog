@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListCheck, faX } from "@fortawesome/free-solid-svg-icons";
+import {
+  faListCheck,
+  faX,
+  faPlus,
+  faTrashCan,
+  faPen,
+} from "@fortawesome/free-solid-svg-icons";
 import NoItemDefaultCard from "./NoItemDefaultCard";
 
 const Giftqueue = () => {
@@ -12,7 +18,7 @@ const Giftqueue = () => {
 
   return (
     <>
-      {!hasGifts ? (
+      {hasGifts ? (
         <NoItemDefaultCard
           icon={faListCheck}
           headingText="No items in your giftqueue"
@@ -20,7 +26,47 @@ const Giftqueue = () => {
           setModalToShow={setAddFirstItemModal}
         />
       ) : (
-        <h2>you got elements</h2>
+        <div className="relative top-10 px-8">
+          <div className="celebration-day-header">
+            <h1 className="text-lg relative right-2">Related Giftqueue</h1>
+            <button className="btn-add-new rounded relative left-2">
+              <FontAwesomeIcon className="relative right-2" icon={faPlus} />
+              Add New Event
+            </button>
+          </div>
+          {/* TODO - extract this out into its own component */}
+          <div className="myGiftqueueCard mt-4">
+            <div className="flex flex-row">
+              <div className="w-full flex flex-row justify-between items-center">
+                <div>
+                  <h3>Item 1 Name</h3>
+                  <p>Related to [Event title], [12 days remaining]</p>
+                </div>
+                <div>
+                  <FontAwesomeIcon
+                    size="lg"
+                    className="muted mr-6"
+                    icon={faTrashCan}
+                  />
+                  <FontAwesomeIcon size="lg" className="gqp" icon={faPen} />
+                </div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <p className="muted">Where to buy:</p>
+              <div className="flex flex-row items-center gap-4">
+                <span>Link 1</span>
+                <span>Link 2</span>
+                <span>Link 3</span>
+                <span>Link 4</span>
+              </div>
+            </div>
+            <div className="mt-4">
+              <p className="muted">Notes:</p>
+              <p>I need a size XL because I'm a really big boiiiiiii</p>
+            </div>
+          </div>
+        </div>
       )}
       {addFirstItemModal ? (
         <>
@@ -80,24 +126,6 @@ const Giftqueue = () => {
       focus:invalid:border-pink-500 focus:invalid:ring-pink-500
     "
                       />
-                      <input
-                        type="text"
-                        placeholder="URL (optional)"
-                        className="mt-4 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-md shadow-sm placeholder-slate-400
-      focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-      invalid:border-pink-500 invalid:text-pink-600
-      focus:invalid:border-pink-500 focus:invalid:ring-pink-500
-    "
-                      />
-                      <input
-                        type="text"
-                        placeholder="URL (optional)"
-                        className="mt-4 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-md shadow-sm placeholder-slate-400
-      focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-      invalid:border-pink-500 invalid:text-pink-600
-      focus:invalid:border-pink-500 focus:invalid:ring-pink-500
-    "
-                      />
                     </label>
                     <label className="block mt-4">
                       <span className="block text-md font-medium">
@@ -133,7 +161,7 @@ const Giftqueue = () => {
                     </label>
                     <textarea
                       id="message"
-                      rows={6}
+                      rows={3}
                       className="mt-4 block p-2.5 w-full text-md shadow-sm placeholder-slate-400 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 focus:ring-1"
                       placeholder="General Notes"
                     ></textarea>
