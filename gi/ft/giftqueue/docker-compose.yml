@@ -1,18 +1,21 @@
-
 version: "3.9"
 
 services:
   frontend:
     build: ./frontend
+    container_name: frontend
+    volumes:
+      - ./frontend:/app
     ports:
-      - 3005:3000
+      - 3000:3000
     environment:
       - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
       - NEXT_PUBLIC_FRONTEND_BASE_URL=$NEXT_PUBLIC_FRONTEND_BASE_URL
-      - NEXT_AUTH_SECRET=$NEXT_AUTH_SECRET
+      - NEXTAUTH_SECRET=$NEXTAUTH_SECRET
       - NEXT_PUBLIC_REGISTRY_BASE_URL=$NEXT_PUBLIC_REGISTRY_BASE_URL
       - NEXT_PUBLIC_REGISTRY_API_BASE_URL=$NEXT_PUBLIC_REGISTRY_API_BASE_URL
+      - NEXTAUTH_URL=$NEXTAUTH_URL
     healthcheck:
       test: ['CMD-SHELL', 'ls']
       interval: 10s
@@ -21,8 +24,11 @@ services:
 
   backend:
     build: ./backend
+    container_name: backend
+    volumes:
+      - ./backend:/app
     ports:
-      - 8009:8000
+      - 8000:8000
     environment:
       - GOOGLE_AUD_CLAIM=$GOOGLE_AUD_CLAIM
       - NEXT_PUBLIC_FRONTEND_BASE_URL=$NEXT_PUBLIC_FRONTEND_BASE_URL
@@ -41,18 +47,20 @@ services:
 
   db:
     image: postgres
+    container_name: db
     restart: always
     environment:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - POSTGRES_USER=$POSTGRES_USER
+    ports:
+      - 5432:5432
     volumes:
-      - fractal-app-volume:/data
+      - ./postgres/data:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready']
       interval: 10s
       timeout: 10s
       retries: 5
-
   link:
     environment:
       EXPOSE: frontend:3000
@@ -65,3 +73,4 @@ volumes:
   fractal-link-volume:
     external: true
     name: $LINK_VOLUME_NAME
+

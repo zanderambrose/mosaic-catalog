@@ -1,13 +1,21 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import {
+  TCelebrationCreate,
+  ICelebrationSerializer,
+  IGiftqueueItemCreate,
+  IGiftqueueSerializer,
+  TGiftqueueDetailSerializer,
+  TCelebrationDetail,
+} from "./typesClientApi";
 
-export const useRegistryApi = () => {
+export const useGiftqueueApi = () => {
   const { data: session } = useSession();
   return {
-    getAllFriends: async (): Promise<any[]> => {
+    getGiftqueueItems: async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}friend/search`,
+        const response = await axios.get<IGiftqueueSerializer[]>(
+          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}giftqueue/`,
           {
             headers: { Authorization: `Bearer ${session?.accessToken}` },
           }
@@ -17,10 +25,11 @@ export const useRegistryApi = () => {
         throw new Error(error.message);
       }
     },
-    getMyWishListItems: async (): Promise<any[]> => {
+    createGiftqueueItem: async (items: IGiftqueueItemCreate) => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}wishlist/`,
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}giftqueue/`,
+          { ...items },
           {
             headers: { Authorization: `Bearer ${session?.accessToken}` },
           }
@@ -30,26 +39,90 @@ export const useRegistryApi = () => {
         throw new Error(error.message);
       }
     },
-    createDate: async (name: string, date: any): Promise<any> => {
+    editGiftqueueItem: async (items: TGiftqueueDetailSerializer) => {
       try {
-        return axios.post(
+        const response = await axios.patch(
+          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}giftqueue/${items.uuid}/`,
+          { name: items.name },
+          {
+            headers: { Authorization: `Bearer ${session?.accessToken}` },
+          }
+        );
+        return response.data;
+      } catch (error: any) {
+        throw new Error(error.message);
+      }
+    },
+    deleteGiftqueueItem: async (itemUuid: string) => {
+      try {
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}giftqueue/${itemUuid}/`,
+          {
+            headers: { Authorization: `Bearer ${session?.accessToken}` },
+          }
+        );
+        return response.data;
+      } catch (error: any) {
+        throw new Error(error.message);
+      }
+    },
+  };
+};
+
+export const useCelebrationApi = () => {
+  const { data: session } = useSession();
+  return {
+    getCelebrations: async () => {
+      try {
+        const response = await axios.get<ICelebrationSerializer[]>(
           `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}celebration/`,
-          { name, date },
-          { headers: { Authorization: `Bearer ${session?.accessToken}` } }
+          {
+            headers: { Authorization: `Bearer ${session?.accessToken}` },
+          }
         );
-        // return response.data;
+        console.log(response);
+        return response.data;
       } catch (error: any) {
         throw new Error(error.message);
       }
     },
-    createWishListItem: async (name: string, url: string): Promise<any> => {
+    createCelebration: async (items: TCelebrationCreate) => {
       try {
-        return axios.post(
-          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}wishlist/`,
-          { name, url },
-          { headers: { Authorization: `Bearer ${session?.accessToken}` } }
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}celebration/`,
+          { ...items },
+          {
+            headers: { Authorization: `Bearer ${session?.accessToken}` },
+          }
         );
-        // return response.data;
+        return response.data;
+      } catch (error: any) {
+        throw new Error(error.message);
+      }
+    },
+    editCelebrationItem: async (items: TCelebrationDetail) => {
+      try {
+        const response = await axios.patch(
+          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}giftqueue/${items.uuid}/`,
+          { name: items.name },
+          {
+            headers: { Authorization: `Bearer ${session?.accessToken}` },
+          }
+        );
+        return response.data;
+      } catch (error: any) {
+        throw new Error(error.message);
+      }
+    },
+    deleteCelebrationItem: async (itemUuid: string) => {
+      try {
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_REGISTRY_API_BASE_URL}celebration/${itemUuid}/`,
+          {
+            headers: { Authorization: `Bearer ${session?.accessToken}` },
+          }
+        );
+        return response.data;
       } catch (error: any) {
         throw new Error(error.message);
       }

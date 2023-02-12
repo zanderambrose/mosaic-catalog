@@ -2,20 +2,14 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-const BtnPrimary = ({
-  text,
-  setIsModalOpen,
-}: {
+interface IBtnPrimary {
   text: string;
-  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+  clickHandler: () => void;
+}
+
+const BtnPrimary = ({ text, clickHandler }: IBtnPrimary) => {
   return (
-    <div
-      onClick={() => {
-        setIsModalOpen && setIsModalOpen(true);
-      }}
-      className="btn-primary hover:opacity-80"
-    >
+    <div onClick={clickHandler} className="btn-primary hover:opacity-80">
       <FontAwesomeIcon className="text-white mr-2" icon={faPlus} />
       <button className="text-white">{text}</button>
     </div>
