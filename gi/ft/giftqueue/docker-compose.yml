@@ -51,7 +51,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./postgres/data:/var/lib/postgresql/data
+      - fractal-app-volume:/data 
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready']
       interval: 10s
