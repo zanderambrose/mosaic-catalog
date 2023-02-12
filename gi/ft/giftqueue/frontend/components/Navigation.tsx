@@ -9,8 +9,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import { faBell, faBars } from "@fortawesome/free-solid-svg-icons";
+import { modalProfileSidebar } from "../recoil/modal/modalProfileSidebar";
+import { modalActivityFeedSidebar } from "../recoil/modal/modalActivityFeedSidebar";
 
 const Navigation = () => {
+  const [isProfileSidebarOpen, setIsProfileSidebarOpen] =
+    useRecoilState(modalProfileSidebar);
+  const [isActivityFeedSidebarOpen, setIsActivityFeedSidebarOpen] =
+    useRecoilState(modalActivityFeedSidebar);
+
   const [navState, setNavState] = useRecoilState(navigationState);
   const router = useRouter();
   const handleNavStateChange = (navItemState: TNavOptions) => {
@@ -85,7 +92,12 @@ const Navigation = () => {
         </div>
       </nav>
       <nav className="h-full nav-shadow nav-mobile">
-        <FontAwesomeIcon className="ml-6" size="2x" icon={faBars} />
+        <FontAwesomeIcon
+          onClick={() => setIsProfileSidebarOpen(true)}
+          className="ml-6 hover:opacity-80"
+          size="2x"
+          icon={faBars}
+        />
         <Image
           onClick={() => handleRouteHome()}
           src="/giftqueueLogo.png"
@@ -93,7 +105,12 @@ const Navigation = () => {
           height={"56"}
           alt={"giftqueue logo"}
         />
-        <FontAwesomeIcon size="2x" className="gqp mr-6" icon={faBell} />
+        <FontAwesomeIcon
+          onClick={() => setIsActivityFeedSidebarOpen(true)}
+          size="2x"
+          className="gqp mr-6 hover:opacity-80"
+          icon={faBell}
+        />
       </nav>
     </>
   );

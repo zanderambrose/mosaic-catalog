@@ -4,6 +4,8 @@ import Maincontent from "./Maincontent";
 import Navigation from "./Navigation";
 import ProfileSidebar from "./ProfileSidebar";
 import { MobileNavigation } from "./MobileNavigation";
+import MobileProfileSidebar from "./MobileProfileSidebar";
+import MobileActivityFeedSidebar from "./MobileActivityFeedSidebar";
 
 const Layout = () => {
   return (
@@ -23,6 +25,8 @@ const Layout = () => {
         </div>
       </div>
       <MobileNavigation />
+      <MobileProfileSidebar />
+      <MobileActivityFeedSidebar />
     </>
   );
 };
