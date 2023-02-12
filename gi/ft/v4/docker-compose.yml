@@ -16,6 +16,12 @@ services:
       - NEXT_PUBLIC_REGISTRY_BASE_URL=$NEXT_PUBLIC_REGISTRY_BASE_URL
       - NEXT_PUBLIC_REGISTRY_API_BASE_URL=$NEXT_PUBLIC_REGISTRY_API_BASE_URL
       - NEXTAUTH_URL=$NEXTAUTH_URL
+    healthcheck:
+      test: ['CMD-SHELL', 'ls']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
   backend:
     build: ./backend
     container_name: backend
@@ -33,6 +39,11 @@ services:
     restart: always
     links:
       - "db:database"
+    healthcheck:
+      test: curl localhost:8000
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
   db:
     image: postgres
@@ -45,9 +56,21 @@ services:
       - 5432:5432
     volumes:
       - ./postgres/data:/var/lib/postgresql/data
-  adminer:
-    image: adminer
-    container_name: db_admin
-    restart: always
-    ports:
-      - 8080:8080
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+  link:
+    environment:
+      EXPOSE: frontend:3000
+    volumes:
+      - fractal-link-volume:/root/.local/share/caddy
+volumes:
+  fractal-app-volume:
+    external: true
+    name: $APP_VOLUME_NAME
+  fractal-link-volume:
+    external: true
+    name: $LINK_VOLUME_NAME
+
